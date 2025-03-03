@@ -1,0 +1,140 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: linear-gradient(to bottom, #5b9efc, #f0f0f0);
+    background-attachment: fixed;
+    background-color: #f0f0f0;
+    color:black;
+  }
+  
+  .nav-container {
+    border-radius: 10px; 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8); 
+    transition: background-color 0.3s ease;
+    background-color: rgba(225, 69, 69, 0.93);
+    z-index: 1;
+  }
+
+.navbar-collapse {
+  background-color: rgba(225, 69, 69, 0.93); /* Match the navbar background */
+}
+  .wall-photo-container {
+    height: 85vh; 
+  }
+  
+  .wall-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .logo-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+  
+  .brand {    
+    filter: invert(96%) sepia(100%) saturate(0%) hue-rotate(92deg) brightness(104%) contrast(104%);
+  }
+  
+  .navbar-nav .nav-item {
+    margin: 0 10px; 
+  }
+  
+  .navbar {
+    background-color: rgba(225, 69, 69, 0.93);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8); 
+    transition: background-color 0.3s ease;
+  }
+  .check
+  {
+    font-weight: 800;
+    padding: 1.5vh 1vw 2.5vh 1vw;
+    background-color: white;
+    position: absolute;
+    top: 94vh;
+    left: 85vw;
+    z-index: 999;
+    color: blue;
+  }
+  .content{
+    padding: 2vw;
+    background-color: rgba(238, 238, 238, 0.774);
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    /* color:#236084; */
+    color: black;
+  }
+  .assets {
+    margin-bottom: 20px;
+  }
+  
+  .asset {
+    background-color: white;    
+    border: 3px solid #236084;
+    /* color: #236084; */
+    color: black;
+    padding: 10px; 
+    border-radius: 8px;
+    margin: 10px;
+    flex: 1;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .assets .col-4 {
+    padding: 0; 
+  }
+.additional-content
+{
+  border-radius: 5px;
+  display: none;
+  position: absolute;
+  top: 105vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 3px solid #236084;
+  padding: 20px;
+  z-index: 2;
+  margin: 0.75vw;
+  overflow: auto;
+}
+.project
+{
+  background-color: darkgrey;
+  border: 2px solid black;
+  margin: 10px;
+  height: 10vh;
+}
+
+.navbar-toggler {
+  position: absolute;
+  top: 50%;
+  left: 95%;
+  transform: translate(-50%, -50%);
+}
+#map { 
+  height: 400px; width: 100%; 
+  border: 3px solid #236084;
+  border-radius: 8px;
+}
+.map-container { 
+  text-align: center;
+  margin-top: 10px; 
+}
+.map-button {
+  padding: 10px; 
+  margin-top: 5px;
+  cursor: pointer; 
+  background-color: white;    
+  border: 3px solid #236084;
+  /* color: #236084; */
+  color: black;
+  border-radius: 8px;
+  text-align: center;
+}
