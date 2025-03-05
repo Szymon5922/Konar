@@ -12,34 +12,18 @@ namespace KonarCMS.Pages
         [BindProperty]
         public Dictionary<string, TileBase> Tiles { get; set; }
         [BindProperty]
-        public DataModel OveralData { get; set; } = new();
-        private Dictionary<string, TileBase> _tilesList
-        {
-            get
-            {
-                var tiles = new Dictionary<string, TileBase>
-                {
-                    {"experience", new TextTile()},
-                    {"commitment", new TextTile()},
-                    {"clients", new TextTile() },
-                    {"workplaces", new ProjectsTile() },
-                    {"constructions", new ProjectsTile() },
-                    {"expertise", new TextTile() }
-                };
-                foreach (var tile in tiles)
-                    tile.Value.Deserialize(_appDataPath, tile.Key);
-                return tiles;
-            }
-        }
+        public OverallData OveralData { get; set; }
         private readonly IWebHostEnvironment _environment;
+        private readonly IDataLoaderService _dataLoaderService;
         private readonly string _appDataPath;
-        public AdminPanelModel(IWebHostEnvironment environment)
+        public AdminPanelModel(IWebHostEnvironment environment, IDataLoaderService dataLoaderService)
         {
             _environment = environment;
             _appDataPath = Path.Combine(_environment.ContentRootPath, "App_Data");
+            _dataLoaderService = dataLoaderService;
 
-            OveralData.Deserialize(_appDataPath, "overall");
-            Tiles = _tilesList;
+            OveralData = _dataLoaderService.GetOverallData();
+            Tiles = _dataLoaderService.GetTiles();
         }
         public ActionResult OnPostSaveTile()
         {
@@ -69,7 +53,7 @@ namespace KonarCMS.Pages
                 target = OveralData;
             }
             else
-                target = _tilesList[targetName];
+                target = _dataLoaderService.GetTile(targetName);
 
             if (ImagesService.UploadImages(target, uploadedFiles, uploadPath))
 
@@ -83,7 +67,7 @@ namespace KonarCMS.Pages
             if (source == "overall")
                 return ImagesService.GetImages(OveralData);
 
-            if (_tilesList[source] is ProjectsTile tile)
+            if (_dataLoaderService.GetTile(source) is ProjectsTile tile)
                 return ImagesService.GetImages(tile);
 
             else return null;
@@ -100,7 +84,7 @@ namespace KonarCMS.Pages
                 target = OveralData;
             }
             else
-                target = _tilesList[targetName];
+                target = _dataLoaderService.GetTile(targetName);
 
             string path = Path.Combine(_environment.WebRootPath, imageToDelete);
             string fileName = Path.GetFileName(imageToDelete);

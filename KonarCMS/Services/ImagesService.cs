@@ -14,7 +14,7 @@ namespace KonarCMS.Services
 
             return imagesUrls;
         }
-        public static List<string> GetImages(DataModel overall)
+        public static List<string> GetImages(OverallData overall)
         {
             List<string> imagesUrls = new();
 
@@ -33,7 +33,7 @@ namespace KonarCMS.Services
 
                 if (target is ProjectsTile projectsTile)
                     projectsTile.Images.Remove(fileName);
-                else if (target is DataModel overall)
+                else if (target is OverallData overall)
                     overall.Photos.Remove(fileName);
 
                 return true;
@@ -50,7 +50,7 @@ namespace KonarCMS.Services
             HashSet<string> targetContainer;
             if (target is ProjectsTile projectsTile)
                 targetContainer = projectsTile.Images;
-            else if (target is DataModel overall)
+            else if (target is OverallData overall)
                 targetContainer = overall.Photos;
             else
                 throw new ArgumentException();

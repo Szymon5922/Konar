@@ -1,7 +1,11 @@
+using KonarCMS.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<IDataLoaderService, DataLoaderService>();
 
 var app = builder.Build();
 
