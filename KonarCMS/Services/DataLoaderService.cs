@@ -1,4 +1,5 @@
-﻿using KonarCMS.Models;
+﻿using KonarCMS.Interfaces;
+using KonarCMS.Models;
 using KonarCMS.Models.Tiles;
 
 namespace KonarCMS.Services
@@ -8,6 +9,7 @@ namespace KonarCMS.Services
         OverallData GetOverallData();
         Dictionary<string, TileBase> GetTiles();
         TileBase GetTile(string tileName);
+        IImagesContainer GetImagesContainer(string name);
     }
     public class DataLoaderService : IDataLoaderService
     {
@@ -36,7 +38,17 @@ namespace KonarCMS.Services
                 tile.Value.Deserialize(_appDataPath, tile.Key);
             return tiles;
         }
-        public Dictionary<string,TileBase> GetTilesList =>
+        public IImagesContainer GetImagesContainer(string name)
+        {
+            if (name == "overall")
+                return GetOverallData();
+            else if (GetTile(name) is IImagesContainer imagesTile)
+                return imagesTile;
+
+            return null;
+        }
+
+        public Dictionary<string, TileBase> GetTilesList =>
             new Dictionary<string, TileBase>
                 {
                     {"experience", new TextTile()},

@@ -1,4 +1,5 @@
-﻿using KonarCMS.Models;
+﻿using KonarCMS.Interfaces;
+using KonarCMS.Models;
 using KonarCMS.Models.Tiles;
 using KonarCMS.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,14 @@ namespace KonarCMS.Pages
         public OverallData OveralData { get; set; }
         private readonly IWebHostEnvironment _environment;
         private readonly IDataLoaderService _dataLoaderService;
+        private readonly IImagesService _imagesService;
         private readonly string _appDataPath;
-        public AdminPanelModel(IWebHostEnvironment environment, IDataLoaderService dataLoaderService)
+        public AdminPanelModel(IWebHostEnvironment environment, IDataLoaderService dataLoaderService, IImagesService imagesService)
         {
             _environment = environment;
             _appDataPath = Path.Combine(_environment.ContentRootPath, "App_Data");
             _dataLoaderService = dataLoaderService;
+            _imagesService = imagesService;
 
             OveralData = _dataLoaderService.GetOverallData();
             Tiles = _dataLoaderService.GetTiles();
@@ -45,30 +48,26 @@ namespace KonarCMS.Pages
         public async Task<IActionResult> OnPostUploadImagesAsync(List<IFormFile> uploadedFiles, string targetName)
         {
             string uploadPath = Path.Combine(_environment.WebRootPath, "photos");
-            object target;
+            IImagesContainer target = _dataLoaderService.GetImagesContainer(targetName);            
 
-            if (targetName == "overall")
+            if (target != null && _imagesService.UploadImages(target, uploadedFiles, uploadPath))
             {
-                OveralData.Deserialize(_appDataPath, targetName);
-                target = OveralData;
-            }
-            else
-                target = _dataLoaderService.GetTile(targetName);
-
-            if (ImagesService.UploadImages(target, uploadedFiles, uploadPath))
-
                 if (target is SerializableObject serializable)
                     serializable.Serialize(_appDataPath, targetName);
-
+            }
+            else
+            {
+                //log
+            }
             return RedirectToPage();
         }
         public List<string> GetImages(string source)
         {
             if (source == "overall")
-                return ImagesService.GetImages(OveralData);
+                return _imagesService.GetImages(OveralData);
 
             if (_dataLoaderService.GetTile(source) is ProjectsTile tile)
-                return ImagesService.GetImages(tile);
+                return _imagesService.GetImages(tile);
 
             else return null;
         }
@@ -76,22 +75,20 @@ namespace KonarCMS.Pages
         {
             var imageToDelete = Request.Form["imageToDelete"];
             var targetName = Request.Form["target"];
-            object target;
+            IImagesContainer target = _dataLoaderService.GetImagesContainer(targetName);            
 
-            if (targetName == "overall")
+            if(target==null)
             {
-                OveralData.Deserialize(_appDataPath, "overall");
-                target = OveralData;
+                //log
+                return RedirectToPage();
             }
-            else
-                target = _dataLoaderService.GetTile(targetName);
 
             string path = Path.Combine(_environment.WebRootPath, imageToDelete);
             string fileName = Path.GetFileName(imageToDelete);
 
-            if (ImagesService.DeleteImage(target, path))
+            if (_imagesService.DeleteImage(target, path))
             {
-                if(target is SerializableObject serializable)
+                if (target is SerializableObject serializable)
                     serializable.Serialize(_appDataPath, targetName);
             }
 
