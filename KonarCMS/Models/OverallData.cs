@@ -2,7 +2,7 @@
 
 namespace KonarCMS.Models
 {
-    public class DataModel:SerializableObject
+    public class OverallData : SerializableObject
     {
         public string Title { get; set; }
         public string Description { get; set; }
