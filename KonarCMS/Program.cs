@@ -4,8 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
 builder.Services.AddScoped<IDataLoaderService, DataLoaderService>();
+builder.Services.AddScoped<IImagesService, ImagesService>();
 
 var app = builder.Build();
 
